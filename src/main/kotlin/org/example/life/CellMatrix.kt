@@ -13,7 +13,7 @@ class CellMatrix<C : Cell>(
 
     private val matrix: List<List<C>>
 
-    private lateinit var relay: Relay<Image>
+    private lateinit var imageChannel: Relay<Image>
 
     init {
         matrix = MutableList(height) { i ->
@@ -41,8 +41,8 @@ class CellMatrix<C : Cell>(
         isDaemon = true
     }
 
-    override fun setOnUpdateScreenListener(relay: Relay<Image>) {
-        this.relay = relay
+    override fun setOnUpdateScreenListener(channelForImage: Relay<Image>) {
+        this.imageChannel = channelForImage
     }
 
     override fun startWork() {
@@ -50,12 +50,12 @@ class CellMatrix<C : Cell>(
     }
 
     override fun run() {
-        relay.accept(getBitmap())
+        imageChannel.accept(getBitmap())
         sleep(1500)
         doForeverWithSleepAndTimeAndRenderCheck {
             matrix.forEachCell { it.countNextState() }
             matrix.forEachCell { it.updateNextState() }
-            relay.accept(getBitmap())
+            imageChannel.accept(getBitmap())
         }
     }
 

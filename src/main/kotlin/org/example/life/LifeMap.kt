@@ -5,7 +5,7 @@ import javafx.scene.image.Image
 
 interface LifeMap {
 
-    fun setOnUpdateScreenListener(relay: Relay<Image>)
+    fun setOnUpdateScreenListener(channelForImage: Relay<Image>)
     fun startWork()
     fun getBitmap(): Image
 

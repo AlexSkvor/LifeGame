@@ -20,14 +20,14 @@ class Controller {
     @FXML
     private lateinit var mapView: ImageView
 
-    private val imageRelay = PublishRelay.create<Image>()
+    private val imageChannel = PublishRelay.create<Image>()
 
     fun initialize() {
         val map: LifeMap = CellMatrix(1200, 800) { _, _ ->
             SimpleSequentialCell(Random.nextBoolean())
         }
-        map.setOnUpdateScreenListener(imageRelay)
-        imageRelay.hide()
+        map.setOnUpdateScreenListener(imageChannel)
+        imageChannel.hide()
             .observeOnFx()
             .subscribe { updateImage(it) }.bind()
         map.startWork()

@@ -10,15 +10,14 @@ class App : Application() {
 
     override fun start(primaryStage: Stage) {
         val loader = FXMLLoader(javaClass.getResource("/sample.fxml"))
-        openEmptyWindowWitTitle(loader, primaryStage)
+        openEmptyWindowWithTitle(loader, primaryStage)
         primaryStage.setOnCloseRequest {
             val controller = loader.getController<Controller>()
             controller.clear()
         }
     }
 
-
-    private fun openEmptyWindowWitTitle(loader: FXMLLoader, stage: Stage) {
+    private fun openEmptyWindowWithTitle(loader: FXMLLoader, stage: Stage) {
         val root: Parent = loader.load()
         stage.title = "Игра Жизнь"
         stage.scene = Scene(root)

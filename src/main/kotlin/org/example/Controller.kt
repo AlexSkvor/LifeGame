@@ -9,11 +9,9 @@ import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.scene.image.PixelReader
 import javafx.scene.image.WritableImage
+import org.example.configuration_tests.ConfigTest
 import org.example.life.CellMatrix
 import org.example.life.LifeMap
-import org.example.life.SimpleSequentialCell
-import kotlin.random.Random
-
 
 class Controller {
 
@@ -23,15 +21,16 @@ class Controller {
     private val imageChannel = PublishRelay.create<Image>()
 
     fun initialize() {
-        val map: LifeMap = CellMatrix(1200, 800) { _, _ ->
-            SimpleSequentialCell(Random.nextBoolean())
-        }
+        ConfigTest().printTestConfig()
+        val config = ConfigTest().getTestConfig()
+        val map: LifeMap = CellMatrix()
+
         map.setOnUpdateScreenListener(imageChannel)
         imageChannel.hide()
             .observeOnFx()
             .subscribe { updateImage(it) }.bind()
-        map.startWork()
 
+        map.generate(config)
     }
 
     private fun updateImage(image: Image) {

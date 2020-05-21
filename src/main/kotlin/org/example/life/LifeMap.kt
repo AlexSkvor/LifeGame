@@ -6,11 +6,12 @@ import javafx.scene.image.Image
 interface LifeMap {
 
     fun setOnUpdateScreenListener(channelForImage: Relay<Image>)
-    fun startWork()
-    fun getBitmap(): Image
+    fun generate(configuration: Configuration)
+    fun play()
+    fun pause()
+    fun step()
 
     companion object {
-        val MINIMAL_RENDER_TIME: Long
-            get() = 30
+        const val MINIMAL_RENDER_TIME: Long = 25
     }
 }

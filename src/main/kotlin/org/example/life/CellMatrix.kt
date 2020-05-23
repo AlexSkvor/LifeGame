@@ -3,6 +3,7 @@ package org.example.life
 import com.jakewharton.rxrelay2.Relay
 import javafx.scene.image.Image
 import javafx.scene.image.WritableImage
+import org.example.alsoPrintDebug
 import org.example.life.LifeMap.Companion.MINIMAL_RENDER_TIME
 
 class CellMatrix() : Thread(), LifeMap {
@@ -21,7 +22,15 @@ class CellMatrix() : Thread(), LifeMap {
         imageChannel = channelForImage
     }
 
+    init {
+        isDaemon = true
+        start()
+    }
+
     override fun generate(configuration: Configuration) {
+        canContinue = false
+        canStep = false
+        canStart = false
         config = configuration
         matrix = MutableList(height) {
             MutableList(width) {
@@ -35,25 +44,41 @@ class CellMatrix() : Thread(), LifeMap {
                     cell.setNeighbours(matrix.getNeighbours(height, width, i, j))
             }
         }
-        isDaemon = true
-        start()//TODO it should be in init and then checking if started in run!!
+        canStart = true
     }
 
+    private var canStart: Boolean = false
+        @Synchronized set
+        @Synchronized get
+
+    private var canContinue: Boolean = false
+        @Synchronized set
+        @Synchronized get
+
+    private var canStep: Boolean = false
+        @Synchronized set
+        @Synchronized get
+
     override fun play() {
-        TODO("Not yet implemented")
+        canContinue = true
+    }
+
+    override fun paused(): Boolean {
+        return !(canContinue || canStep)
     }
 
     override fun pause() {
-        TODO("Not yet implemented")
+        canContinue = false
     }
 
     override fun step() {
-        TODO("Not yet implemented")
+        canStep = true
     }
 
     override fun run() {
+        while (!canStart) sleep(100)
         imageChannel.accept(getBitmap())
-        sleep(1500)
+        sleep(500)
         doForeverWithSleepAndTimeAndRenderCheck { //TODO parallel Impl
             matrix.forEachCell { it.countNextState(config) } // TODO config from each thread
             matrix.forEachCell { it.recalculateFields(config) }
@@ -66,6 +91,9 @@ class CellMatrix() : Thread(), LifeMap {
         var prevTime = System.currentTimeMillis()
         var shouldSleep = false
         while (true) {//TODO count steps, every species number, every mineral number
+            while (!canContinue && !canStep) sleep(100)
+            canStep = false
+
             if (shouldSleep) sleep(MINIMAL_RENDER_TIME)
 
             action.invoke()

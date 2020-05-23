@@ -1,7 +1,9 @@
 package org.example
 
+import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
+import javafx.scene.control.Button
 import org.example.life.Configuration
 import kotlin.random.Random
 
@@ -20,4 +22,10 @@ inline fun <reified T> Set<T>.randomOrder() = this.sortedBy { Random.nextInt() }
 
 inline fun <reified T> MutableList<T>.dropAfter(index: Int) {
     for (i in size - 1 downTo index) removeAt(i)
+}
+
+fun Button.clicks(): Observable<Unit> {
+    val relay = PublishRelay.create<Unit>()
+    setOnMouseClicked { relay.accept(Unit) }
+    return relay.hide()
 }

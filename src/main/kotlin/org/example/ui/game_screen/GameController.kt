@@ -1,36 +1,42 @@
-package org.example
+package org.example.ui.game_screen
 
 import com.github.thomasnield.rxkotlinfx.observeOnFx
 import com.jakewharton.rxrelay2.PublishRelay
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import javafx.fxml.FXML
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.scene.image.PixelReader
 import javafx.scene.image.WritableImage
-import org.example.configuration_tests.ConfigTest
-import org.example.life.CellMatrix
-import org.example.life.LifeMap
+import org.example.App
+import org.example.alsoPrintDebug
+import org.example.life.Configuration
+import org.example.ui.base.UiController
+import org.example.ui.main_screen.ConfigurationsLoader
 
-class Controller {
+class GameController : UiController() {
 
     @FXML
     private lateinit var mapView: ImageView
 
+    private lateinit var config: Configuration
+
     private val imageChannel = PublishRelay.create<Image>()
 
-    fun initialize() {
-        ConfigTest().printTestConfig()
-        val config = ConfigTest().getTestConfig()
-        val map: LifeMap = CellMatrix()
+    override fun onViewCreated() {
+        @Suppress("ControlFlowWithEmptyBody")
+        while (!App.lifeMap.paused());
 
-        map.setOnUpdateScreenListener(imageChannel)
+        config = ConfigurationsLoader().getConfigByName(App.state.currentConfigurationName)
+        App.lifeMap.setOnUpdateScreenListener(imageChannel)
         imageChannel.hide()
             .observeOnFx()
             .subscribe { updateImage(it) }.bind()
+        App.lifeMap.generate(config)
+        App.lifeMap.play()
+    }
 
-        map.generate(config)
+    override fun onClose() {
+        App.lifeMap.pause()
     }
 
     private fun updateImage(image: Image) {
@@ -65,13 +71,4 @@ class Controller {
         return output
     }
 
-    private fun Disposable.bind() {
-        compositeDisposable.add(this)
-    }
-
-    fun clear() {
-        compositeDisposable.clear()
-    }
-
-    private val compositeDisposable = CompositeDisposable()
 }

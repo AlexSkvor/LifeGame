@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.example.ui.main_screen.MainScreenController"
+      prefHeight="500.0" prefWidth="600.0">
+
+    <Button fx:id="createNewButton" text="Создать конфигурацию" layoutX="15.0" layoutY="15.0"/>
+    <ListView fx:id="configurationsListView" layoutX="15.0" layoutY="45.0" prefHeight="440.0" prefWidth="200.0"/>
+    <Button fx:id="chosenConfigurationName" layoutX="230.0" layoutY="15.0"/>
+    <Button fx:id="deleteConfiguration" text="Удалить конфигурацию" layoutX="230.0" layoutY="45.0"/>
+
+    <Button fx:id="stonePercentButton" layoutX="230.0" layoutY="85.0"/>
+    <Button fx:id="speciesPercentButton" layoutX="230.0" layoutY="115.0"/>
+    <Button fx:id="neededMineralsMultiplierButton" layoutX="230.0" layoutY="145.0"/>
+    <Button fx:id="onDeathMultiplierButton" layoutX="230.0" layoutY="175.0"/>
+    <Button fx:id="startMineralsButton" layoutX="230.0" layoutY="205.0"/>
+    <Button fx:id="seedsLifeTimeButton" layoutX="230.0" layoutY="235.0"/>
+    <Button fx:id="mapSizeButton" layoutX="230.0" layoutY="265.0"/>
+
+    <Button fx:id="mineralsButton" text="Настройки ресурсов" layoutX="230.0" layoutY="305.0"/>
+    <Button fx:id="speciesButton" text="Настройки форм жизни" layoutX="230.0" layoutY="335.0"/>
+    <Button fx:id="startButton" text="СТАРТ" prefWidth="100" prefHeight="50" layoutX="230.0" layoutY="385.0"/>
+
+    <Button fx:id="startEditButton" text="Начать редактирование" layoutX="230.0" layoutY="460.0"/>
+    <Button fx:id="cancelEditButton" text="Отменить редактирование" layoutX="230.0" layoutY="460.0"/>
+    <Button fx:id="saveEditButton" text="Сохранить" layoutX="410.0" layoutY="460.0"/>
+
+</Pane>

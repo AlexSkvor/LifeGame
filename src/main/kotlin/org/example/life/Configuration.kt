@@ -10,8 +10,12 @@ data class Configuration(
     val startMinerals: Int,
     val seedsLifeTime: Int,
     val width: Int,
-    val height: Int
+    val height: Int,
+    val fileName: String
 ) {
     fun getDefaultMineralsMapCopy(): MutableMap<Int, Int> =
         minerals.map { it.id to startMinerals }.toMap().toMutableMap()
+
+    val mapSize: Int
+        get() = width / 12
 }

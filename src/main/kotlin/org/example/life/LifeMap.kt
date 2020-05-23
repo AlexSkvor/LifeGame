@@ -11,6 +11,8 @@ interface LifeMap {
     fun pause()
     fun step()
 
+    fun paused(): Boolean
+
     companion object {
         const val MINIMAL_RENDER_TIME: Long = 25
     }

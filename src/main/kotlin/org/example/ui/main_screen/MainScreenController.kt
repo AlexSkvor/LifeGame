@@ -9,7 +9,6 @@ import javafx.scene.control.Button
 import javafx.scene.control.ListView
 import javafx.scene.control.TextFormatter
 import javafx.scene.control.TextInputDialog
-import org.example.App
 import org.example.clicks
 import org.example.doNothing
 import org.example.life.Configuration
@@ -83,7 +82,7 @@ class MainScreenController : UiController(), MainScreenView {
 
     override fun onGlobalAction(it: GlobalAction) = doNothing()
 
-    override fun selectConfigIntent(): Observable<String> = configurationsListView.itemSelections.map { it }
+    override fun selectConfigIntent(): Observable<String> = configurationsListView.itemSelections
 
     override fun startEditCurrentConfigIntent(): Observable<Unit> = startEditButton.clicks()
 
@@ -133,19 +132,18 @@ class MainScreenController : UiController(), MainScreenView {
         startButton.isVisible = !state.changeStarted
 
         mineralsButton.setOnMouseClicked {
-            //TODO
+            //TODO app state to stop changes!
+            createChildStage("minerals_main_screen.fxml", "Минералы")
         }
 
         speciesButton.setOnMouseClicked {
+            //TODO app state to stop changes!
             //TODO
         }
 
         startButton.setOnMouseClicked {
             //TODO app state to stop changes!
-            state.chosenConfiguration?.let {
-                App.state.currentConfigurationName = it.fileName
-                createChildStage("game_screen.fxml", "Игра \"Жизнь\"")
-            }
+            createChildStage("game_screen.fxml", "Игра \"Жизнь\"")
         }
 
         state.changedChosenConfiguration?.let {

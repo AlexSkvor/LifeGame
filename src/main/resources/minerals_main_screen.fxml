@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.example.ui.minerals_main_screen.MineralsMainScreenController"
+            prefHeight="500.0" prefWidth="300.0">
+
+    <Button fx:id="createNewMineralButton" text="Создать ресурс" layoutX="15.0" layoutY="15.0"/>
+    <ListView fx:id="mineralsListView" layoutX="15.0" layoutY="45.0" prefHeight="440.0" prefWidth="270.0"/>
+
+</AnchorPane>

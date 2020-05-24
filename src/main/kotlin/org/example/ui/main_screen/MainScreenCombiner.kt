@@ -30,9 +30,9 @@ class MainScreenCombiner(
             )
             MainScreenPartialState.StartEdit -> oldState.copy(changeStarted = true)
             is MainScreenPartialState.ConfigsListAfterSaving -> MainScreenViewState(
-                configsList = it.list, //TODO save chosen! or renew after creating!
-                chosenConfiguration = it.list.first(),
-                changedChosenConfiguration = it.list.first(),
+                configsList = it.list,
+                chosenConfiguration = it.list.firstOrNull{conf -> conf.fileName == oldState.changedChosenConfiguration?.fileName} ?: it.list.first(),
+                changedChosenConfiguration = it.list.firstOrNull{conf -> conf.fileName == oldState.changedChosenConfiguration?.fileName} ?: it.list.first(),
                 changeStarted = false
             )
             MainScreenPartialState.StopEdit -> oldState.copy(
@@ -106,7 +106,7 @@ class MainScreenCombiner(
         actions.subscribe {
             when (it) {
                 is MainScreenPartialState.ConfigsList -> doNothing()
-                is MainScreenPartialState.ConfigChosen -> doNothing()
+                is MainScreenPartialState.ConfigChosen -> App.state.currentConfigurationName = it.config.fileName
                 is MainScreenPartialState.ConfigsListAfterSaving -> App.state.configurationInChangeProcess = false
                 MainScreenPartialState.StopEdit -> App.state.configurationInChangeProcess = false
                 MainScreenPartialState.StartEdit -> App.state.configurationInChangeProcess = true

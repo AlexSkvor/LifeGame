@@ -3,7 +3,6 @@ package org.example.life
 import com.jakewharton.rxrelay2.Relay
 import javafx.scene.image.Image
 import javafx.scene.image.WritableImage
-import org.example.alsoPrintDebug
 import org.example.life.LifeMap.Companion.MINIMAL_RENDER_TIME
 
 class CellMatrix() : Thread(), LifeMap {
@@ -78,7 +77,6 @@ class CellMatrix() : Thread(), LifeMap {
     override fun run() {
         while (!canStart) sleep(100)
         imageChannel.accept(getBitmap())
-        sleep(500)
         doForeverWithSleepAndTimeAndRenderCheck { //TODO parallel Impl
             matrix.forEachCell { it.countNextState(config) } // TODO config from each thread
             matrix.forEachCell { it.recalculateFields(config) }

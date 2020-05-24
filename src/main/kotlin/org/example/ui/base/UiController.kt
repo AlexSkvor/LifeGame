@@ -58,7 +58,7 @@ abstract class UiController : DisposablesProvider by AppDisposables() {
 
     private fun close() {
         onClose()
-        childrenStages.forEach { it.closeWithCallBack() }
+        childrenStages.toList().forEach { it.closeWithCallBack() }
         this::class.java.canonicalName.alsoPrintDebug("closed")
         clear()
     }

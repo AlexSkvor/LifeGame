@@ -3,12 +3,12 @@ package org.example.ui.game_screen
 import com.github.thomasnield.rxkotlinfx.observeOnFx
 import com.jakewharton.rxrelay2.PublishRelay
 import javafx.fxml.FXML
+import javafx.scene.control.Button
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.scene.image.PixelReader
 import javafx.scene.image.WritableImage
 import org.example.App
-import org.example.alsoPrintDebug
 import org.example.life.Configuration
 import org.example.ui.base.UiController
 import org.example.ui.main_screen.ConfigurationsLoader
@@ -17,6 +17,15 @@ class GameController : UiController() {
 
     @FXML
     private lateinit var mapView: ImageView
+
+    @FXML
+    private lateinit var playButton: Button
+
+    @FXML
+    private lateinit var pauseButton: Button
+
+    @FXML
+    private lateinit var stepButton: Button
 
     private lateinit var config: Configuration
 
@@ -32,7 +41,13 @@ class GameController : UiController() {
             .observeOnFx()
             .subscribe { updateImage(it) }.bind()
         App.lifeMap.generate(config)
-        App.lifeMap.play()
+        App.lifeMap.step()
+        playButton.setOnMouseClicked { App.lifeMap.play() }
+        pauseButton.setOnMouseClicked { App.lifeMap.pause() }
+        stepButton.setOnMouseClicked {
+            if (App.lifeMap.paused())
+                App.lifeMap.step()
+        }
     }
 
     override fun onClose() {

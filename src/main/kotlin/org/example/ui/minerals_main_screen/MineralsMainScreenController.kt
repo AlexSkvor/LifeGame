@@ -10,6 +10,7 @@ import javafx.scene.control.Button
 import javafx.scene.control.ListView
 import javafx.scene.control.TextFormatter
 import javafx.scene.control.TextInputDialog
+import org.example.App
 import org.example.life.Mineral
 import org.example.ui.base.UiController
 import java.util.function.UnaryOperator
@@ -61,7 +62,7 @@ class MineralsMainScreenController : UiController(), MineralsMainScreenView {
             else null
         })
         dialog.showAndWait().ifPresent {
-            if (it.isNotBlank() && it.toLowerCase() != "удалить")
+            if (it.isNotBlank() && it.toLowerCase() != "удалить" && exists < App.MAX_MINERALS)
                 createMineralRelay.accept(it)
         }
     }

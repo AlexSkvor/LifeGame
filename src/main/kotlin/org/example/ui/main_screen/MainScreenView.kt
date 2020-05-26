@@ -5,9 +5,6 @@ import io.reactivex.Observable
 interface MainScreenView {
 
     fun selectConfigIntent(): Observable<String>
-    fun startEditCurrentConfigIntent(): Observable<Unit>
-    fun saveCurrentConfigIntent(): Observable<Unit>
-    fun cancelChangingIntent(): Observable<Unit>
     fun deleteCurrentConfigIntent(): Observable<Unit>
 
     fun newConfigNameIntent(): Observable<String>

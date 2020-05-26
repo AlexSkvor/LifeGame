@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.example.ui.species_screen.SpeciesScreenController"
+      prefHeight="500.0" prefWidth="875.0">
+
+    <Button fx:id="createNewSpeciesButton" text="Создать форму Жизни" layoutX="15.0" layoutY="15.0" prefWidth="200.0"/>
+    <ListView fx:id="speciesListView" layoutX="15.0" layoutY="45.0" prefHeight="440.0" prefWidth="200.0"/>
+    <Button fx:id="chosenSpeciesName" layoutX="230.0" layoutY="15.0" prefWidth="200.0"/>
+    <Button fx:id="deleteSpecies" text="Удалить форму Жизни" layoutX="230.0" layoutY="45.0" prefWidth="200.0"/>
+
+    <Button fx:id="colorButton" layoutX="230.0" layoutY="85.0" prefWidth="200.0"/>
+    <Button fx:id="alwaysDroppedSeedsChanceButton" layoutX="230.0" layoutY="115.0" prefWidth="200.0"/>
+    <Button fx:id="mainFieldMultiplierDropAndWasteButton" layoutX="230.0" layoutY="145.0" prefWidth="200.0"/>
+    <Button fx:id="levelsButton" text="Настройки уровней" layoutX="230.0" layoutY="175.0" prefWidth="200.0"/>
+
+
+    <Button text="Потребляет ресурсы:" layoutX="445.0" layoutY="15.0" prefWidth="200.0"/>
+    <Button text="Производит ресурсы:" layoutX="660.0" layoutY="15.0" prefWidth="200.0"/>
+
+    <ListView fx:id="needMineralsListView" layoutX="445.0" layoutY="45.0" prefHeight="440.0" prefWidth="200.0"/>
+    <ListView fx:id="dropMineralsListView" layoutX="660.0" layoutY="45.0" prefHeight="440.0" prefWidth="200.0"/>
+
+</Pane>

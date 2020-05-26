@@ -1,5 +1,8 @@
 package org.example.life
 
+private const val WIDTH = 12
+private const val HEIGHT = 8
+
 data class Configuration(
     val minerals: ArrayList<Mineral>,
     val species: ArrayList<Species>,
@@ -16,6 +19,11 @@ data class Configuration(
     fun getDefaultMineralsMapCopy(): MutableMap<Int, Int> =
         minerals.map { it.id to startMinerals }.toMap().toMutableMap()
 
+    fun newWithSize(size: Int) = copy(
+        width = WIDTH * size,
+        height = HEIGHT * size
+    )
+
     val mapSize: Int
-        get() = width / 12
+        get() = width / WIDTH
 }

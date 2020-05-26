@@ -25,15 +25,6 @@ class MainScreenController : UiController(), MainScreenView {
     private lateinit var chosenConfigurationName: Button
 
     @FXML
-    private lateinit var startEditButton: Button
-
-    @FXML
-    private lateinit var cancelEditButton: Button
-
-    @FXML
-    private lateinit var saveEditButton: Button
-
-    @FXML
     private lateinit var deleteConfiguration: Button
 
     @FXML
@@ -84,12 +75,6 @@ class MainScreenController : UiController(), MainScreenView {
 
     override fun selectConfigIntent(): Observable<String> = configurationsListView.itemSelections
 
-    override fun startEditCurrentConfigIntent(): Observable<Unit> = startEditButton.clicks()
-
-    override fun saveCurrentConfigIntent(): Observable<Unit> = saveEditButton.clicks()
-
-    override fun cancelChangingIntent(): Observable<Unit> = cancelEditButton.clicks()
-
     override fun deleteCurrentConfigIntent(): Observable<Unit> = deleteConfiguration.clicks() //TODO ALERT DIALOG
 
     private val newNameRelay = PublishRelay.create<String>()
@@ -120,35 +105,22 @@ class MainScreenController : UiController(), MainScreenView {
     override fun createNewConfigIntent(): Observable<String> = createNewConfigRelay.hide()
 
     override fun render(state: MainScreenViewState) {
-        renderConfigList(state.configsList, state.changedChosenConfiguration)
-        configurationsListView.isVisible = !state.changeStarted
-        startEditButton.isVisible = !state.changeStarted
-        cancelEditButton.isVisible = state.changeStarted
-        saveEditButton.isVisible = state.changeStarted
-        deleteConfiguration.isVisible = !state.changeStarted && state.configsList.size != 1
-        createNewButton.isVisible = !state.changeStarted
-        mineralsButton.isVisible = !state.changeStarted
-        speciesButton.isVisible = !state.changeStarted
-        startButton.isVisible = !state.changeStarted
+        renderConfigList(state.configsList, state.chosenConfiguration)
 
         mineralsButton.setOnMouseClicked {
-            //TODO app state to stop changes!
             createChildStage("minerals_main_screen.fxml", "Минералы")
         }
 
         speciesButton.setOnMouseClicked {
-            //TODO app state to stop changes!
-            //TODO
+            createChildStage("species_screen.fxml", "Формы Жизни")
         }
 
         startButton.setOnMouseClicked {
-            //TODO app state to stop changes!
             createChildStage("game_screen.fxml", "Игра \"Жизнь\"")
         }
 
-        state.changedChosenConfiguration?.let {
+        state.chosenConfiguration.let {
             renderTextButton(
-                state.changeStarted,
                 stonePercentButton,
                 "Шанс появления камня на клетке при старте:",
                 "%",
@@ -161,7 +133,6 @@ class MainScreenController : UiController(), MainScreenView {
             }
 
             renderTextButton(
-                state.changeStarted,
                 speciesPercentButton,
                 "Шанс появления семени на клетке при старте:",
                 "%",
@@ -174,7 +145,7 @@ class MainScreenController : UiController(), MainScreenView {
             }
 
             renderTextButton(
-                state.changeStarted, onDeathMultiplierButton, "Множитель при смерти:", "", "[0-9]*".toRegex(),
+                onDeathMultiplierButton, "Множитель при смерти:", "", "[0-9]*".toRegex(),
                 it.onDeathMultiplier.toString()
             ) { newValue ->
                 newValue.toIntOrNull()?.let { num ->
@@ -183,7 +154,7 @@ class MainScreenController : UiController(), MainScreenView {
             }
 
             renderTextButton(
-                state.changeStarted, startMineralsButton, "Стартовые ресурсы:", "шт", "[0-9]*".toRegex(),
+                startMineralsButton, "Стартовые ресурсы:", "шт", "[0-9]*".toRegex(),
                 it.startMinerals.toString()
             ) { newValue ->
                 newValue.toIntOrNull()?.let { num ->
@@ -192,7 +163,7 @@ class MainScreenController : UiController(), MainScreenView {
             }
 
             renderTextButton(
-                state.changeStarted, seedsLifeTimeButton, "Продолжительность жизни семян:", "ходов", "[0-9]*".toRegex(),
+                seedsLifeTimeButton, "Продолжительность жизни семян:", "ходов", "[0-9]*".toRegex(),
                 it.seedsLifeTime.toString()
             ) { newValue ->
                 newValue.toIntOrNull()?.let { num ->
@@ -201,7 +172,7 @@ class MainScreenController : UiController(), MainScreenView {
             }
 
             renderTextButton(
-                state.changeStarted, mapSizeButton, "Размер карты", "% от макс", "[0-9]*".toRegex(),
+                mapSizeButton, "Размер карты", "% от макс", "[0-9]*".toRegex(),
                 it.mapSize.toString()
             ) { newValue ->
                 newValue.toIntOrNull()?.let { num ->
@@ -210,7 +181,6 @@ class MainScreenController : UiController(), MainScreenView {
             }
 
             renderTextButton(
-                state.changeStarted,
                 neededMineralsMultiplierButton,
                 "Коэффициент достаточности:",
                 "",
@@ -223,7 +193,7 @@ class MainScreenController : UiController(), MainScreenView {
             }
 
             renderTextButton(
-                state.changeStarted, chosenConfigurationName, "Конфигурация:", "", "^[а-яА-ЯёЁa-zA-Z0-9]*\$".toRegex(),
+                chosenConfigurationName, "Конфигурация:", "", "^[а-яА-ЯёЁa-zA-Z0-9]*\$".toRegex(),
                 it.fileName
             ) { newName ->
                 if (newName.isNotBlank()) newNameRelay.accept(newName)
@@ -239,13 +209,13 @@ class MainScreenController : UiController(), MainScreenView {
     }
 
     private fun renderTextButton(
-        changeMode: Boolean, view: Button, hint: String, secondHint: String, regexp: Regex, value: String,
+        view: Button, hint: String, secondHint: String, regexp: Regex, value: String,
         onChange: (String) -> Unit
     ) {
         view.text = if (secondHint.isBlank()) "$hint $value"
         else "$hint $value ($secondHint)"
         view.setOnMouseClicked {
-            if (changeMode) openEditDialog(hint, secondHint, value, regexp, onChange)
+            openEditDialog(hint, secondHint, value, regexp, onChange)
         }
     }
 
@@ -262,6 +232,7 @@ class MainScreenController : UiController(), MainScreenView {
         })
         dialog.showAndWait().ifPresent { onChange(it) }
     }
+
 
     private val observableConfigurations = FXCollections.observableArrayList<String>()
     private fun renderConfigList(list: List<Configuration>, current: Configuration?) {

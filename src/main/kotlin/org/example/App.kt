@@ -18,6 +18,10 @@ class App : Application() {
         private val relay = BehaviorRelay.create<GlobalAction>()
         val globalActions = relay.hide().share()
         fun pushAction(action: GlobalAction) = relay.accept(action)
+
+        const val MAX_SPECIES = 7
+        const val MAX_MINERALS = 7
+
         val state = AppState()
 
         val lifeMap: LifeMap by lazy { CellMatrix() }

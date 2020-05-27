@@ -11,10 +11,12 @@ import javafx.scene.control.ListView
 import javafx.scene.control.TextFormatter
 import javafx.scene.control.TextInputDialog
 import javafx.scene.paint.Color
-import org.example.alsoPrintDebug
+import org.example.App
 import org.example.clicks
-import org.example.life.Mineral
 import org.example.ui.base.UiController
+import org.example.ui.common.UiMineral
+import org.example.ui.common.dialogChangeMineralValue
+import org.example.ui.common.toUiMineralsList
 import java.util.function.UnaryOperator
 
 class SpeciesScreenController : UiController(), SpeciesScreenView {
@@ -38,7 +40,7 @@ class SpeciesScreenController : UiController(), SpeciesScreenView {
     private lateinit var mainFieldMultiplierDropAndWasteButton: Button
 
     @FXML
-    private lateinit var levelsButton: Button //TODO
+    private lateinit var levelsButton: Button
 
     @FXML
     private lateinit var speciesListView: ListView<String>
@@ -116,25 +118,16 @@ class SpeciesScreenController : UiController(), SpeciesScreenView {
             }.bind()
     }
 
-    private fun dialogChangeMineralValue(uiMineral: UiMineral, hint: String, onChange: (Int) -> Unit) {
-        val dialog = TextInputDialog(uiMineral.number.toString())
-        dialog.title = "Изменение ресурса"
-        dialog.headerText = hint
-        dialog.contentText = "Количество ресурса"
-        dialog.editor.textFormatter = TextFormatter<TextFormatter.Change>(UnaryOperator { change ->
-            if (change.text.matches("^[0-9]*\$".toRegex())) change
-            else null
-        })
-        dialog.showAndWait().ifPresent { str ->
-            str.toIntOrNull()?.let { onChange(it) }
-        }
-    }
-
     override fun onClose() {
         if (::combiner.isInitialized) combiner.clear()
     }
 
     override fun render(state: SpeciesScreenViewState) {
+
+        levelsButton.setOnMouseClicked {
+            App.state.currentSpeciesId = state.currentSpecies.id
+            createChildStage("levels_screen.fxml", "Уровни ${state.currentSpecies.name}")
+        }
 
         chosenSpeciesName.text = "Название: " + state.currentSpecies.name
         chosenSpeciesName.setOnMouseClicked {
@@ -246,16 +239,5 @@ class SpeciesScreenController : UiController(), SpeciesScreenView {
             else null
         })
         dialog.showAndWait().ifPresent { onChange(it) }
-    }
-
-    private fun Map<Int, Int>.toUiMineralsList(minerals: List<Mineral>): List<UiMineral> = toList()
-        .map { UiMineral(minerals[it.first].name, it.first, it.second) }.sortedBy { it.id }
-
-    private data class UiMineral(
-        val name: String,
-        val id: Int,
-        val number: Int
-    ) {
-        override fun toString(): String = "$name $number"
     }
 }

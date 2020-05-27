@@ -19,6 +19,9 @@ data class Configuration(
     fun getDefaultMineralsMapCopy(): MutableMap<Int, Int> =
         minerals.map { it.id to startMinerals }.toMap().toMutableMap()
 
+    fun getDefaultMineralsMapCopyZeroValues(): MutableMap<Int, Int> =
+        minerals.map { it.id to 0 }.toMap().toMutableMap()
+
     fun newWithSize(size: Int) = copy(
         width = WIDTH * size,
         height = HEIGHT * size

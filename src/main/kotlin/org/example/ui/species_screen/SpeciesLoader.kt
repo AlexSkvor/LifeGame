@@ -7,6 +7,7 @@ import org.example.App
 import org.example.life.Configuration
 import org.example.life.Level
 import org.example.life.Species
+import org.example.life.updateValue
 import org.example.ui.main_screen.ConfigurationsLoader
 
 class SpeciesLoader {
@@ -23,14 +24,14 @@ class SpeciesLoader {
             color = Color.RED,
             levels = arrayListOf(
                 Level(
-                    config.getDefaultMineralsMapCopy(),
-                    config.getDefaultMineralsMapCopy(),
-                    config.getDefaultMineralsMapCopy(),
+                    config.getDefaultMineralsMapCopyZeroValues(),
+                    config.getDefaultMineralsMapCopyZeroValues(),
+                    config.getDefaultMineralsMapCopyZeroValues(),
                     0
                 )
             ),
-            needMineralsForStayAlive = config.getDefaultMineralsMapCopy(),
-            alwaysMineralsDropped = config.getDefaultMineralsMapCopy(),
+            needMineralsForStayAlive = config.getDefaultMineralsMapCopyZeroValues(),
+            alwaysMineralsDropped = config.getDefaultMineralsMapCopyZeroValues(),
             alwaysDroppedSeedsChance = 0,
             mainFieldMultiplierDropAndWaste = 0
         )
@@ -74,9 +75,6 @@ class SpeciesLoader {
         changeAttr(speciesId) {
             it.copy(alwaysMineralsDropped = it.alwaysMineralsDropped.updateValue(mineralId, value))
         }
-
-    private fun Map<Int, Int>.updateValue(key: Int, newValue: Int): Map<Int, Int> =
-        toList().map { if (it.first == key) it.copy(second = newValue) else it }.toMap()
 
     private fun changeAttr(id: Int, change: (Species) -> Species): Observable<Configuration> {
         val config = getConfig()

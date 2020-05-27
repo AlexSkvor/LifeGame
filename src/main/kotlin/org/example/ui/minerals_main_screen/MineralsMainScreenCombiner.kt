@@ -48,17 +48,15 @@ class MineralsMainScreenCombiner(
     private fun getActions(): Observable<MineralsMainScreenPartialState> {
 
         val renameAction = view.renameMineralIntent()
-            .filter { !App.state.configurationInChangeProcess }
             .flatMap { mineralsLoader.renameMineral(oldName = it.first, newName = it.second) }
             .map { MineralsMainScreenPartialState.NewConfigurationState(it) }
 
         val deleteAction = view.deleteMineralIntent()
-            .filter { !App.state.configurationInChangeProcess && lastState.config.minerals.size != 1 }
+            .filter { lastState.config.minerals.size != 1 }
             .flatMap { mineralsLoader.deleteMineral(name = it) }
             .map { MineralsMainScreenPartialState.NewConfigurationState(it) }
 
         val createAction = view.createMineralIntent()
-            .filter { !App.state.configurationInChangeProcess }
             .flatMap { mineralsLoader.createMineral(name = it) }
             .map { MineralsMainScreenPartialState.NewConfigurationState(it) }
 

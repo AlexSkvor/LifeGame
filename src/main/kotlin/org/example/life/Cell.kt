@@ -93,14 +93,14 @@ sealed class CellCommon {
             neighbours.forEach {
                 val instance = it.currentInstance
                 val indicator = Random.nextInt(0, 100)
-                if (indicator <= it.dropSeedsChance && instance != null)
+                if (indicator < it.dropSeedsChance && instance != null)
                     seeds[instance.speciesId] = configuration.seedsLifeTime
             }
             val instance = currentInstance
             val indicator = Random.nextInt(0, 100)
-            if (instance != null && indicator <= dropSeedsChance * configuration.species[instance.speciesId].mainFieldMultiplierDropAndWaste)
+            if (instance != null && indicator < dropSeedsChance * configuration.species[instance.speciesId].mainFieldMultiplierDropAndWaste)
                 seeds[instance.speciesId] = configuration.seedsLifeTime
-            seeds.keys.forEach { seeds[it] = seeds[it]!! - 1 }
+            seeds.keys.forEach { seeds[it] = if (seeds[it] == 0) 0 else seeds[it]!! - 1 }
         }
 
         private fun countNextStateFromSeeds(configuration: Configuration) {

@@ -7,3 +7,6 @@ data class Mineral(
     val name: String,
     val color: Color
 )
+
+fun Map<Int, Int>.updateValue(key: Int, newValue: Int): Map<Int, Int> =
+    toList().map { if (it.first == key) it.copy(second = newValue) else it }.toMap()

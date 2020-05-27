@@ -29,3 +29,5 @@ fun Button.clicks(): Observable<Unit> {
     setOnMouseClicked { relay.accept(Unit) }
     return relay.hide()
 }
+
+fun String.filterDigits() = filter { it in '0'..'9' }

@@ -23,6 +23,11 @@
 
     <Button fx:id="mineralsButton" text="Настройки ресурсов" layoutX="230.0" layoutY="305.0"/>
     <Button fx:id="speciesButton" text="Настройки форм жизни" layoutX="230.0" layoutY="335.0"/>
-    <Button fx:id="startButton" text="СТАРТ" prefWidth="100" prefHeight="50" layoutX="230.0" layoutY="385.0"/>
+    <Button fx:id="threadsNumButton" layoutX="230.0" layoutY="375.0"/>
+
+    <Button fx:id="startButton" text="СТАРТ" prefWidth="100" prefHeight="50" layoutX="230.0" layoutY="415.0"/>
+
+    <Button fx:id="timeButton" prefWidth="100" prefHeight="50" layoutX="345.0" layoutY="415.0"/>
+
 
 </Pane>

@@ -1,6 +1,5 @@
 package org.example.ui.main_screen
 
-import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.Observable.merge
 import io.reactivex.functions.BiFunction
@@ -96,6 +95,10 @@ class MainScreenCombiner(
             .flatMap { configLoader.createNewConfig(it) }
             .map { MainScreenPartialState.ConfigsList(it) }
 
+        val newThreadsNumAction = view.newThreadsIntent()
+            .flatMap { newValue -> configLoader.changeAttr { it.copy(threadsNum = newValue) } }
+            .map { MainScreenPartialState.ConfigsList(it) }
+
         val list = listOf(
             selectAction,
             deleteAction,
@@ -107,7 +110,8 @@ class MainScreenCombiner(
             newStartMineralsAction,
             newSeedsLifeTimeAction,
             newSizeAction,
-            createNewConfigAction
+            createNewConfigAction,
+            newThreadsNumAction
         )
         return merge(list)
     }

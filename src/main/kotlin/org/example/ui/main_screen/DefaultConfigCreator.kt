@@ -22,7 +22,8 @@ fun defaultConfig(name: String = "defaultConfig"): Configuration {
         seedsLifeTime = 50,
         width = 120,
         height = 80,
-        fileName = name
+        fileName = name,
+        threadsNum = 1
     )
 }
 

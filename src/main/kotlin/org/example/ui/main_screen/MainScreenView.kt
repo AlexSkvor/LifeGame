@@ -16,6 +16,8 @@ interface MainScreenView {
     fun newSeedsLifeTimeIntent(): Observable<Int>
     fun newSizeIntent(): Observable<Int>
 
+    fun newThreadsIntent(): Observable<Int>
+
     fun createNewConfigIntent(): Observable<String>
 
     fun render(state: MainScreenViewState)

@@ -1,11 +1,15 @@
 package org.example.life
 
 import com.jakewharton.rxrelay2.Relay
+import io.reactivex.Observable
 import javafx.scene.image.Image
 import javafx.scene.image.WritableImage
+import org.example.alsoPrintDebug
 import org.example.life.LifeMap.Companion.MINIMAL_RENDER_TIME
+import org.example.ui.base.AppState
+import java.util.concurrent.TimeUnit
 
-class CellMatrix() : Thread(), LifeMap {
+class CellMatrix : Thread(), LifeMap {
 
     private lateinit var matrix: List<List<CellCommon>>
     private lateinit var config: Configuration
@@ -16,14 +20,29 @@ class CellMatrix() : Thread(), LifeMap {
     private val height
         get() = config.height
 
-    lateinit var imageChannel: Relay<Image>
+    private lateinit var imageChannel: Relay<Image>
     override fun setOnUpdateScreenListener(channelForImage: Relay<Image>) {
         imageChannel = channelForImage
+    }
+
+    override val iterations: Observable<Long>
+        get() = Observable.interval(35, TimeUnit.MILLISECONDS)
+
+    private lateinit var timeChannel: Relay<Long>
+    override fun setOnEndListener(channelForEnd: Relay<Long>) {
+        timeChannel = channelForEnd
     }
 
     init {
         isDaemon = true
         start()
+    }
+
+    private var style = AppState.Style.WATCH
+
+    @Synchronized
+    override fun setStyle(style: AppState.Style) {
+        this.style = style
     }
 
     override fun generate(configuration: Configuration) {
@@ -43,6 +62,9 @@ class CellMatrix() : Thread(), LifeMap {
                     cell.setNeighbours(matrix.getNeighbours(height, width, i, j))
             }
         }
+
+        threadedCounter = ThreadedCounter(config = config, matrix = matrix)
+
         canStart = true
     }
 
@@ -68,68 +90,83 @@ class CellMatrix() : Thread(), LifeMap {
 
     override fun pause() {
         canContinue = false
+        canStep = false
     }
 
     override fun step() {
         canStep = true
     }
 
+    private lateinit var threadedCounter: ThreadedCounter
+
     override fun run() {
         while (!canStart) sleep(100)
         imageChannel.accept(getBitmap())
-        doForeverWithSleepAndTimeAndRenderCheck { //TODO parallel Impl
-            matrix.forEachCell { it.countNextState(config) } // TODO config from each thread
-            matrix.forEachCell { it.recalculateFields(config) }
-            matrix.forEachCell { it.updateToNextState() }
-            imageChannel.accept(getBitmap())
+
+        while (true) {
+            while (!canContinue && !canStep) sleep(100)
+            when (style) {
+                AppState.Style.WATCH -> onWatchStyleAction()
+                AppState.Style.TIME -> thousandInvocations()
+            }
         }
     }
 
-    private fun doForeverWithSleepAndTimeAndRenderCheck(action: () -> Unit) {
+    private fun onWatchStyleAction() {
         var prevTime = System.currentTimeMillis()
         var shouldSleep = false
-        while (true) {//TODO count steps, every species number, every mineral number
+
+        while (true) {
             while (!canContinue && !canStep) sleep(100)
             canStep = false
 
             if (shouldSleep) sleep(MINIMAL_RENDER_TIME)
 
-            action.invoke()
+            threadedCounter.step()
+            imageChannel.accept(getBitmap())
 
             val newTime = System.currentTimeMillis()
             val timePassed = newTime - prevTime
             prevTime = newTime
 
-            println("Current time $newTime; Millis passed $timePassed")
+            println("Millis for last iteration $timePassed")
             shouldSleep = if (shouldSleep) (timePassed < MINIMAL_RENDER_TIME * 2)
             else (timePassed < MINIMAL_RENDER_TIME)
         }
     }
 
-    private fun getBitmap(): Image {//TODO parallelImp
+    private fun thousandInvocations() {
+        var prevTime = System.currentTimeMillis()
+        val superStartTime = System.currentTimeMillis()
+
+        imageChannel.accept(getBitmap())
+
+        for (i in 1..1000) {//TODO change from user!
+            if (i % 10 == 0) i.alsoPrintDebug("step")
+            threadedCounter.step()
+
+            if (System.currentTimeMillis() - prevTime > 1000L) {
+                imageChannel.accept(getBitmap())
+                prevTime = System.currentTimeMillis()
+            }
+        }
+
+        val totalTime = System.currentTimeMillis() - superStartTime
+        println("TOTAL TIME $totalTime")
+        pause()
+        return timeChannel.accept(totalTime)
+    }
+
+    private fun getBitmap(): Image {
         val image = WritableImage(width, height)
         val writer = image.pixelWriter
 
-        matrix.forEachCellIndexed { i, j, cell ->
-            writer.setColor(j, i, cell.color(config)) //TODO mode species or minerals, config from each thread
+        matrix.forEachIndexed { i, line ->
+            line.forEachIndexed { j, cell ->
+                writer.setColor(j, i, cell.color())
+            }
         }
 
         return image
-    }
-}
-
-private fun List<List<CellCommon>>.forEachCell(action: (CellCommon) -> Unit) {
-    forEach { line ->
-        line.forEach {
-            action(it)
-        }
-    }
-}
-
-private fun List<List<CellCommon>>.forEachCellIndexed(action: (Int, Int, CellCommon) -> Unit) {
-    forEachIndexed { i, line ->
-        line.forEachIndexed { j, cell ->
-            action(i, j, cell)
-        }
     }
 }

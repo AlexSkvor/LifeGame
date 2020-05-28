@@ -7,13 +7,13 @@ import kotlin.random.Random
 
 sealed class CellCommon {
 
-    abstract fun color(configuration: Configuration): Color
+    abstract fun color(): Color
     abstract fun countNextState(configuration: Configuration)
     abstract fun recalculateFields(configuration: Configuration)
     abstract fun updateToNextState()
 
     object Stone : CellCommon() {
-        override fun color(configuration: Configuration): Color = Color.BLACK
+        override fun color(): Color = Color.BLACK
         override fun countNextState(configuration: Configuration) = Unit
         override fun recalculateFields(configuration: Configuration) = Unit
         override fun updateToNextState() = Unit
@@ -34,12 +34,20 @@ sealed class CellCommon {
             this.neighbours = neighbours
         }
 
-        override fun color(configuration: Configuration): Color {
-            val species = currentInstance ?: return Color.WHITE
-            val color = configuration.species[species.speciesId].color
-            val intensity =
-                (species.currentLevelNumber + 1).toDouble() / configuration.species[species.speciesId].levels.size
-            return Color.color(color.red, color.green, color.blue, intensity)
+        private var color: Color = Color.WHITE
+
+        override fun color(): Color = color
+
+        private fun recalculateColor(configuration: Configuration) {
+            val species = currentInstance
+            if (species != null) {
+                val color = configuration.species[species.speciesId].color
+                val intensity =
+                    (species.currentLevelNumber + 1).toDouble() / configuration.species[species.speciesId].levels.size
+                this.color = Color.color(color.red, color.green, color.blue, intensity)
+            } else {
+                color = Color.WHITE
+            }
         }
 
         override fun countNextState(configuration: Configuration) {
@@ -55,6 +63,7 @@ sealed class CellCommon {
         override fun recalculateFields(configuration: Configuration) {
             collectSeeds(configuration)
             collectMinerals(configuration)
+            recalculateColor(configuration)
         }
 
         override fun updateToNextState() {

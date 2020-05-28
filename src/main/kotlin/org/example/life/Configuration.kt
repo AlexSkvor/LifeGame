@@ -4,6 +4,7 @@ private const val WIDTH = 12
 private const val HEIGHT = 8
 
 data class Configuration(
+    val threadsNum: Int,
     val minerals: ArrayList<Mineral>,
     val species: ArrayList<Species>,
     val stonePercent: Int,

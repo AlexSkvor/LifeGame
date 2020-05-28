@@ -9,9 +9,11 @@ import javafx.scene.control.Button
 import javafx.scene.control.ListView
 import javafx.scene.control.TextFormatter
 import javafx.scene.control.TextInputDialog
+import org.example.App
 import org.example.clicks
 import org.example.doNothing
 import org.example.life.Configuration
+import org.example.ui.base.AppState
 import org.example.ui.base.GlobalAction
 import org.example.ui.base.UiController
 import java.util.function.UnaryOperator
@@ -29,6 +31,9 @@ class MainScreenController : UiController(), MainScreenView {
 
     @FXML
     private lateinit var stonePercentButton: Button
+
+    @FXML
+    private lateinit var threadsNumButton: Button
 
     @FXML
     private lateinit var speciesPercentButton: Button
@@ -60,9 +65,13 @@ class MainScreenController : UiController(), MainScreenView {
     @FXML
     private lateinit var startButton: Button
 
+    @FXML
+    private lateinit var timeButton: Button
+
     private lateinit var combiner: MainScreenCombiner
 
     override fun onViewCreated() {
+        timeButton.text = "ЗАМЕР\n 1000"
         combiner = MainScreenCombiner(this)
         configurationsListView.items = observableConfigurations
     }
@@ -73,9 +82,12 @@ class MainScreenController : UiController(), MainScreenView {
 
     override fun onGlobalAction(it: GlobalAction) = doNothing()
 
+    private val threadsRelay = PublishRelay.create<Int>()
+    override fun newThreadsIntent(): Observable<Int> = threadsRelay.hide()
+
     override fun selectConfigIntent(): Observable<String> = configurationsListView.itemSelections
 
-    override fun deleteCurrentConfigIntent(): Observable<Unit> = deleteConfiguration.clicks() //TODO ALERT DIALOG
+    override fun deleteCurrentConfigIntent(): Observable<Unit> = deleteConfiguration.clicks()
 
     private val newNameRelay = PublishRelay.create<String>()
     override fun newConfigNameIntent(): Observable<String> = newNameRelay.hide()
@@ -116,10 +128,29 @@ class MainScreenController : UiController(), MainScreenView {
         }
 
         startButton.setOnMouseClicked {
+            App.state.gameStyle = AppState.Style.WATCH
+            createChildStage("game_screen.fxml", "Игра \"Жизнь\"")
+        }
+
+        timeButton.setOnMouseClicked {
+            App.state.gameStyle = AppState.Style.TIME
             createChildStage("game_screen.fxml", "Игра \"Жизнь\"")
         }
 
         state.chosenConfiguration.let {
+
+            renderTextButton(
+                threadsNumButton,
+                "Использовать потоков:",
+                "",
+                "[0-9]*".toRegex(),
+                it.threadsNum.toString()
+            ) { newValue ->
+                newValue.toIntOrNull()?.let { num ->
+                    if (num in 1..32) threadsRelay.accept(num)
+                }
+            }
+
             renderTextButton(
                 stonePercentButton,
                 "Шанс появления камня на клетке при старте:",

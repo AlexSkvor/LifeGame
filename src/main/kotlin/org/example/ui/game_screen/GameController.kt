@@ -9,7 +9,6 @@ import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.scene.image.PixelReader
 import javafx.scene.image.WritableImage
-import javafx.scene.paint.Color
 import javafx.scene.text.Text
 import org.example.App
 import org.example.life.Configuration
@@ -22,9 +21,6 @@ class GameController : UiController() {
 
     @FXML
     private lateinit var mapView: ImageView
-
-    @FXML
-    private lateinit var corner: ImageView
 
     @FXML
     private lateinit var playButton: Button
@@ -93,14 +89,7 @@ class GameController : UiController() {
     }
 
     override fun onClose() {
-        App.lifeMap.pause()
-    }
-
-    private fun updateCorner(num: Long) {
-        val color = if (num and 1 == 1L) Color.RED else Color.WHITE
-        val image = WritableImage(1, 1)
-        image.pixelWriter.setColor(0, 0, color)
-        corner.image = image
+        App.lifeMap.stopCount()
     }
 
     private fun timePassed(time: Long) {

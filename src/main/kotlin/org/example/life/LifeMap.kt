@@ -14,8 +14,7 @@ interface LifeMap {
     fun play()
     fun pause()
     fun step()
-
-    val iterations: Observable<Long>
+    fun stopCount()
 
     fun setStyle(style: AppState.Style)
 

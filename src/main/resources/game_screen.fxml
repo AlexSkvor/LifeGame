@@ -25,9 +25,5 @@
     <Button fx:id="stepButton" text="STEP" layoutX="1230.0" layoutY="95.0"/>
 
     <Text fx:id="timeInfo" layoutX="1230.0" layoutY="15.0"/>
-    <ImageView fx:id="corner"
-               fitHeight="1.0"
-               fitWidth="1.0"
-               smooth="false"
-    />
+
 </Pane>

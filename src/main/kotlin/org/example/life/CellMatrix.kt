@@ -1,13 +1,11 @@
 package org.example.life
 
 import com.jakewharton.rxrelay2.Relay
-import io.reactivex.Observable
 import javafx.scene.image.Image
 import javafx.scene.image.WritableImage
 import org.example.alsoPrintDebug
 import org.example.life.LifeMap.Companion.MINIMAL_RENDER_TIME
 import org.example.ui.base.AppState
-import java.util.concurrent.TimeUnit
 
 class CellMatrix : Thread(), LifeMap {
 
@@ -24,9 +22,6 @@ class CellMatrix : Thread(), LifeMap {
     override fun setOnUpdateScreenListener(channelForImage: Relay<Image>) {
         imageChannel = channelForImage
     }
-
-    override val iterations: Observable<Long>
-        get() = Observable.interval(35, TimeUnit.MILLISECONDS)
 
     private lateinit var timeChannel: Relay<Long>
     override fun setOnEndListener(channelForEnd: Relay<Long>) {
@@ -80,7 +75,12 @@ class CellMatrix : Thread(), LifeMap {
         @Synchronized set
         @Synchronized get
 
+    private var shouldStop: Boolean = false
+        @Synchronized set
+        @Synchronized get
+
     override fun play() {
+        shouldStop = false
         canContinue = true
     }
 
@@ -93,6 +93,11 @@ class CellMatrix : Thread(), LifeMap {
 
     override fun paused(): Boolean {
         return !(canContinue || canStep)
+    }
+
+    override fun stopCount(){
+        shouldStop = true
+        pause()
     }
 
     override fun pause() {
@@ -124,7 +129,12 @@ class CellMatrix : Thread(), LifeMap {
         var shouldSleep = false
 
         while (true) {
-            while (!canContinue && !canStep) sleep(100)
+            if (shouldStop) return
+
+            while (!canContinue && !canStep) {
+                sleep(100)
+                if (shouldStop) return
+            }
             canStep = false
 
             if (shouldSleep) sleep(MINIMAL_RENDER_TIME)

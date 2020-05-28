@@ -9,11 +9,11 @@ class CountThread(
     override fun run() {
         while (true) {
             counter.barrier.await()
-            doForCells { it.countNextState(config) }
+            doForCells { it.countNextState(config) } //расширение
             counter.barrier.await()
-            doForCells { it.recalculateFields(config) }
+            doForCells { it.recalculateFields(config) } //сокращение часть 1
             counter.barrier.await()
-            doForCells { it.updateToNextState() }
+            doForCells { it.updateToNextState() } //сокращение часть 2
             counter.barrier.await()
         }
     }

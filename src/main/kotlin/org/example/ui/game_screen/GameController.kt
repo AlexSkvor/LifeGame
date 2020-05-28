@@ -50,7 +50,7 @@ class GameController : UiController() {
         timeInfo.text = "Экран открыт в режиме замера времени!\n" +
                 "Пожалуйста, не закрывайте экран до \n" +
                 " окончания расчетов\n" +
-                "Будет подсчитано 1000 итераций\n\n" +
+                "Будет подсчитано ${App.state.iterations} итераций\n\n" +
                 "В целях экономии процессорного времени,\n" +
                 " изображение на экране будет обновляться\n" +
                 " не чаще 1 раза в секунду\n\n" +
@@ -58,9 +58,6 @@ class GameController : UiController() {
                 " результаты!"
 
         config = ConfigurationsLoader().getConfigByName(App.state.currentConfigurationName)
-        /*App.lifeMap.iterations
-            .observeOnFx()
-            .subscribe { updateCorner(it) }.bind()*/
         imageChannel.hide()
             .observeOnFx()
             .subscribe { updateImage(it) }.bind()
@@ -85,6 +82,7 @@ class GameController : UiController() {
                 timeInfo.isVisible = false
             }
             AppState.Style.TIME -> {
+                App.lifeMap.setIterations(App.state.iterations)
                 App.lifeMap.play()
                 playButton.isVisible = false
                 pauseButton.isVisible = false
@@ -107,7 +105,7 @@ class GameController : UiController() {
 
     private fun timePassed(time: Long) {
         val alert = Alert(Alert.AlertType.INFORMATION)
-        alert.title = "Итоги замеров"
+        alert.title = "Итоги замеров ${App.state.iterations} итераций"
         alert.contentText = "На карте размером ${config.width}*${config.height}\n" +
                 "Вычисления при ${config.threadsNum} потоках\n" +
                 "Заняли $time миллисекунд!"

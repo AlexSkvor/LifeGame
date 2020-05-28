@@ -71,7 +71,7 @@ class MainScreenController : UiController(), MainScreenView {
     private lateinit var combiner: MainScreenCombiner
 
     override fun onViewCreated() {
-        timeButton.text = "ЗАМЕР\n 1000"
+        timeButton.text = "ЗАМЕРЫ"
         combiner = MainScreenCombiner(this)
         configurationsListView.items = observableConfigurations
     }
@@ -133,8 +133,15 @@ class MainScreenController : UiController(), MainScreenView {
         }
 
         timeButton.setOnMouseClicked {
-            App.state.gameStyle = AppState.Style.TIME
-            createChildStage("game_screen.fxml", "Игра \"Жизнь\"")
+            openEditDialog("Количество итераций", "", "100", "^[0-9]*\$".toRegex()) {
+                it.toIntOrNull()?.let { iters ->
+                    if (iters > 0) {
+                        App.state.iterations = iters
+                        App.state.gameStyle = AppState.Style.TIME
+                        createChildStage("game_screen.fxml", "Игра \"Жизнь\"")
+                    }
+                }
+            }
         }
 
         state.chosenConfiguration.let {

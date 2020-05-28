@@ -9,6 +9,7 @@ interface LifeMap {
 
     fun setOnEndListener(channelForEnd: Relay<Long>)
     fun setOnUpdateScreenListener(channelForImage: Relay<Image>)
+    fun setIterations(i: Int)
     fun generate(configuration: Configuration)
     fun play()
     fun pause()

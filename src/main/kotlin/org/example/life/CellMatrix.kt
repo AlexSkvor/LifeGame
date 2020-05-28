@@ -84,6 +84,13 @@ class CellMatrix : Thread(), LifeMap {
         canContinue = true
     }
 
+    private var iters: Int = 0
+
+    @Synchronized
+    override fun setIterations(i: Int) {
+        iters = i
+    }
+
     override fun paused(): Boolean {
         return !(canContinue || canStep)
     }
@@ -141,7 +148,7 @@ class CellMatrix : Thread(), LifeMap {
 
         imageChannel.accept(getBitmap())
 
-        for (i in 1..1000) {//TODO change from user!
+        for (i in 1..iters) {
             if (i % 10 == 0) i.alsoPrintDebug("step")
             threadedCounter.step()
 

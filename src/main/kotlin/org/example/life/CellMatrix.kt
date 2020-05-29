@@ -106,6 +106,7 @@ class CellMatrix : Thread(), LifeMap {
     }
 
     override fun step() {
+        shouldStop = false
         canStep = true
     }
 
@@ -116,7 +117,7 @@ class CellMatrix : Thread(), LifeMap {
         imageChannel.accept(getBitmap())
 
         while (true) {
-            while (!canContinue && !canStep) sleep(100)
+            while (paused()) sleep(100)
             when (style) {
                 AppState.Style.WATCH -> onWatchStyleAction()
                 AppState.Style.TIME -> thousandInvocations()
@@ -131,7 +132,7 @@ class CellMatrix : Thread(), LifeMap {
         while (true) {
             if (shouldStop) return
 
-            while (!canContinue && !canStep) {
+            while (paused()) {
                 sleep(100)
                 if (shouldStop) return
             }

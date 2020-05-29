@@ -3,12 +3,8 @@ package org.example.ui.main_screen
 import com.google.gson.Gson
 import io.reactivex.Observable
 import io.reactivex.Observable.just
-import javafx.scene.paint.Color
 import org.example.App
 import org.example.life.Configuration
-import org.example.life.Level
-import org.example.life.Mineral
-import org.example.life.Species
 import java.io.File
 
 class ConfigurationsLoader {
@@ -72,12 +68,6 @@ class ConfigurationsLoader {
     fun createNewConfig(name: String): Observable<List<Configuration>> {
         defaultConfig(name).also { saveConfigBlocking(it) }
         return just(getConfigsListBlocking())
-    }
-
-    fun changeConfigName(newName: String): Observable<List<Configuration>> {
-        val config = getConfigByName(App.state.currentConfigurationName)
-        val newConf = config.copy(fileName = newName)
-        return saveConfig(config.fileName, newConf)
     }
 
     fun changeAttr(change: (Configuration) -> Configuration): Observable<List<Configuration>> {

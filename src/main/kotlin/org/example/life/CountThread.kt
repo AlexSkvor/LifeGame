@@ -11,9 +11,9 @@ class CountThread(
             counter.barrier.await()
             doForCells { it.countNextState(config) } //расширение
             counter.barrier.await()
-            doForCells { it.recalculateFields(config) } //сокращение часть 1
+            doForCells { it.recalculateFields(config) } //сокращение
             counter.barrier.await()
-            doForCells { it.updateToNextState() } //сокращение часть 2
+            doForCells { it.updateToNextState() } //обработка
             counter.barrier.await()
         }
     }

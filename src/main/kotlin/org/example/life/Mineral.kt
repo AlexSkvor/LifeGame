@@ -4,8 +4,7 @@ import javafx.scene.paint.Color
 
 data class Mineral(
     val id: Int,
-    val name: String,
-    val color: Color
+    val name: String
 )
 
 fun Map<Int, Int>.updateValue(key: Int, newValue: Int): Map<Int, Int> =

@@ -8,8 +8,8 @@ import org.example.life.Species
 
 
 fun defaultConfig(name: String = "defaultConfig"): Configuration {
-    val mineral0 = Mineral(0, "Ресурс 1", Color.SILVER)
-    val mineral1 = Mineral(1, "Ресурс 2", Color.ORANGE)
+    val mineral0 = Mineral(0, "Ресурс 1")
+    val mineral1 = Mineral(1, "Ресурс 2")
 
     return Configuration(
         minerals = arrayListOf(mineral0, mineral1),

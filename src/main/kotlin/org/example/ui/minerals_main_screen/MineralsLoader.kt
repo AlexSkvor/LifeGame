@@ -49,7 +49,7 @@ class MineralsLoader(private val configLoader: ConfigurationsLoader) {
         val oldConfig = configLoader.getConfigByName(App.state.currentConfigurationName)
         val addingId = oldConfig.minerals.size
 
-        val newMinerals = oldConfig.minerals + Mineral(addingId, name, Color.SILVER)
+        val newMinerals = oldConfig.minerals + Mineral(addingId, name)
 
         val newSpecies = oldConfig.species.map { oldSpecies ->
             oldSpecies.copy(

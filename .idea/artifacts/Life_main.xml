@@ -1,0 +1,46 @@
+<component name="ArtifactManager">
+  <artifact type="javafx" name="Life.main">
+    <output-path>$PROJECT_DIR$/out/artifacts/Life_main</output-path>
+    <properties id="javafx-properties">
+      <options>
+        <option name="appClass" value="org.example.Main" />
+        <option name="description" value="" />
+        <option name="htmlPlaceholderId" value="" />
+        <option name="nativeBundle" value="all" />
+        <option name="title" value="" />
+        <option name="vendor" value="" />
+        <option name="version" value="" />
+      </options>
+    </properties>
+    <root id="root">
+      <element id="archive" name="Life_main.jar">
+        <element id="module-output" name="Life.main" />
+        <element id="directory" name="META-INF">
+          <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
+        </element>
+      </element>
+      <element id="dir-copy" path="$PROJECT_DIR$/src/main/resources" />
+      <element id="artifact" artifact-name="Life.main:jar" />
+      <element id="library" level="project" name="Gradle: com.github.thomasnield:rxkotlinfx:2.0.2" />
+      <element id="library" level="project" name="Gradle: com.google.code.gson:gson:2.8.2" />
+      <element id="library" level="project" name="Gradle: com.jakewharton.rxrelay2:rxrelay:2.1.0" />
+      <element id="library" level="project" name="Gradle: io.reactivex.rxjava2:rxjava:2.2.8" />
+      <element id="library" level="project" name="Gradle: io.reactivex:rxjavafx:2.0.2" />
+      <element id="library" level="project" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-common:1.3.72" />
+      <element id="library" level="project" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.72" />
+      <element id="library" level="project" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.72" />
+      <element id="library" level="project" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.3.72" />
+      <element id="library" level="project" name="Gradle: org.jetbrains:annotations:13.0" />
+      <element id="library" level="project" name="Gradle: org.openjfx:javafx-base:11.0.2" />
+      <element id="library" level="project" name="Gradle: org.openjfx:javafx-base:win:11.0.2" />
+      <element id="library" level="project" name="Gradle: org.openjfx:javafx-controls:11.0.2" />
+      <element id="library" level="project" name="Gradle: org.openjfx:javafx-controls:win:11.0.2" />
+      <element id="library" level="project" name="Gradle: org.openjfx:javafx-fxml:win:11.0.2" />
+      <element id="library" level="project" name="Gradle: org.openjfx:javafx-graphics:11.0.2" />
+      <element id="library" level="project" name="Gradle: org.openjfx:javafx-graphics:win:11.0.2" />
+      <element id="library" level="project" name="Gradle: org.reactivestreams:reactive-streams:1.0.2" />
+      <element id="library" level="project" name="Gradle: org.hamcrest:hamcrest-core:1.3" />
+      <element id="library" level="project" name="Gradle: junit:junit:4.12" />
+    </root>
+  </artifact>
+</component>

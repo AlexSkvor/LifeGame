@@ -6,7 +6,7 @@
 <Pane xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.example.ui.levels_screen.LevelsScreenController"
-      prefHeight="500.0" prefWidth="915.0">
+      prefHeight="500.0" prefWidth="875.0">
 
     <Button fx:id="createNewLevelButton" text="Добавить уровень" layoutX="15.0" layoutY="15.0" prefWidth="200.0"/>
     <Button fx:id="deleteLevelButton" text="Удалить уровень" layoutX="15.0" layoutY="45.0" prefWidth="200.0"/>
@@ -20,8 +20,8 @@
     <Button text="Доп. потребление" layoutX="445.0" layoutY="15.0" prefWidth="200.0"/>
     <ListView fx:id="neededMineralsListView" layoutX="445.0" layoutY="45.0" prefHeight="440.0" prefWidth="200.0"/>
 
-    <Button text="Доп. выработка" layoutX="700.0" layoutY="15.0" prefWidth="200.0"/>
-    <ListView fx:id="dropMineralsListView" layoutX="700.0" layoutY="45.0" prefHeight="440.0" prefWidth="200.0"/>
+    <Button text="Доп. выработка" layoutX="660.0" layoutY="15.0" prefWidth="200.0"/>
+    <ListView fx:id="dropMineralsListView" layoutX="660.0" layoutY="45.0" prefHeight="440.0" prefWidth="200.0"/>
 
 
 </Pane>
